@@ -11,6 +11,7 @@ const ForgotPasswordScreen = () => {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
+                    'x-api-key': ENVIROMENT.API_KEY
                 },
                 body: JSON.stringify(form_state)
             })

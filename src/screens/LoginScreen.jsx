@@ -20,7 +20,8 @@ const LoginScreen = () => {
             const response = await fetch(ENVIROMENT.API_URL + '/api/auth/login', {
                 method: "POST",
                 headers:{
-                    'Content-Type': "application/json"
+                    'Content-Type': "application/json",
+                    'x-api-key': ENVIROMENT.API_KEY
                 },
                 body: JSON.stringify(form_state)
             })
