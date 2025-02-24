@@ -94,9 +94,14 @@ const LoginScreen = () => {
           {errors.password && <p className="error-text">{errors.password}</p>}
         </div>
 
-        <button type="submit" disabled={!form_state.email || !form_state.password}>
-          Iniciar sesión
-        </button>
+        <button type='submit' disabled={
+                    errores.email.length || 
+                    errores.password.length || 
+                    !form_state.email || 
+                    !form_state.password
+                    }>
+                    Iniciar sesion
+                </button>
 
         <p className="description">
           ¿Olvidaste tu contraseña? <Link to="/forgot-password">Recupérala aquí</Link>
