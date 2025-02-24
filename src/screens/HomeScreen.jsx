@@ -5,6 +5,7 @@ import { useFetch } from '../hooks/useFetch'
 import { Link } from 'react-router-dom'
 import "../styles/home.css"
 import { MdWorkspaces } from "react-icons/md"
+import {MdAdd} from "react-icons/md"
 
 const HomeScreen = () => {
     const { 
