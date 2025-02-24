@@ -14,11 +14,11 @@
   
   .home-header h1 {
     font-size: 2rem;
-    color: #1d1c1d;
+    color: #f5d0f5;
   }
   
   .profile-link {
-    color: #1264a3;
+    color: #ffffff;
     text-decoration: none;
     font-weight: 600;
   }
@@ -35,7 +35,7 @@
   .workspaces-section h2,
   .create-workspace-section h2 {
     font-size: 1.5rem;
-    color: #1d1c1d;
+    color: #c09cc0;
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
@@ -86,7 +86,7 @@
   .no-workspaces {
     grid-column: 1 / -1;
     text-align: center;
-    color: #616061;
+    color: #ff0000;
   }
   
   .create-workspace-section {

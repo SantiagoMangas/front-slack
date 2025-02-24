@@ -21,15 +21,12 @@ const App = () => {
       <Route path="/error" element={<ErrorScreen />} />
       <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
       <Route path="/reset-password" element={<ResetPasswordScreen />} />
-      
-      {/* Rutas protegidas */}
-      <Route element={<ProtectedRoute />}>
+
         <Route path="/home" element={<HomeScreen />} />
         <Route path="/workspace/new" element={<CreateWorkspaceScreen />} />
         <Route path="/workspace/:workspace_id" element={<WorkspaceScreen />} />
         <Route path="/workspace/:workspace_id/:channel_id" element={<WorkspaceScreen />} />
         <Route path="/profile" element={<UserInfoScreen />} />
-      </Route>
     </Routes>
   );
 };
