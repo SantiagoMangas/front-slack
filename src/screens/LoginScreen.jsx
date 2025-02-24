@@ -8,45 +8,48 @@ import { AuthContext } from "../Context/AuthContext"
 import "../styles/auth.css"
 
 const LoginScreen = () => {
-  const { login } = useContext(AuthContext)
-  const navigate = useNavigate()
-  const { form_state, handleChangeInput } = useForm({ email: "", password: "" })
-  const { errors, validate } = useValidation(form_state)
-  const [passwordVisible, setPasswordVisible] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
-
-  useEffect(() => {
-    validate()
-  }, [form_state, validate])
-
-  const handleSubmitForm = async (event) => {
-    event.preventDefault()
-
-    if (errors.email.length || errors.password.length) return
-
-    try {
-      const response = await fetch(`${ENVIROMENT.API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": ENVIROMENT.API_KEY,
-        },
-        body: JSON.stringify(form_state),
-      })
-
-      const data = await response.json()
-      if (!response.ok) {
-        setErrorMessage(data.message || "Error desconocido")
-        return
+    const { login } = useContext(AuthContext)
+    const navigate = useNavigate()
+    const { form_state, handleChangeInput } = useForm({ email: "", password: "" })
+    const { errors, validate } = useValidation(form_state)
+    const [passwordVisible, setPasswordVisible] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+  
+    // Ejecuta la validación solo cuando cambie el formulario (email o password)
+    useEffect(() => {
+      if (form_state.email || form_state.password) {
+        validate()
       }
-
-      login(data.data.access_token)
-      navigate("/home")
-    } catch (error) {
-      setErrorMessage("Hubo un error al iniciar sesión. Intenta nuevamente.")
-      console.error("Error al iniciar sesión", error)
-    }
-  }
+    }, [form_state.email, form_state.password, validate])
+  
+    const handleSubmitForm = async (event) => {
+      event.preventDefault()
+  
+      if (errors.email.length || errors.password.length) return
+  
+      try {
+        const response = await fetch(`${ENVIROMENT.API_URL}/api/auth/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": ENVIROMENT.API_KEY,
+          },
+          body: JSON.stringify(form_state),
+        })
+  
+        const data = await response.json()
+        if (!response.ok) {
+          setErrorMessage(data.message || "Error desconocido")
+          return
+        }
+  
+        login(data.data.access_token)
+        navigate("/home")
+      } catch (error) {
+        setErrorMessage("Hubo un error al iniciar sesión. Intenta nuevamente.")
+        console.error("Error al iniciar sesión", error)
+      }
+    }  
 
   return (
     <main className="auth-screen">
