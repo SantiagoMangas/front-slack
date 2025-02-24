@@ -1,0 +1,147 @@
+.home-screen {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: "Lato", sans-serif;
+  }
+  
+  .home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .home-header h1 {
+    font-size: 2rem;
+    color: #1d1c1d;
+  }
+  
+  .profile-link {
+    color: #1264a3;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  .profile-link:hover {
+    text-decoration: underline;
+  }
+  
+  .home-content {
+    display: grid;
+    gap: 2rem;
+  }
+  
+  .workspaces-section h2,
+  .create-workspace-section h2 {
+    font-size: 1.5rem;
+    color: #1d1c1d;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .workspace-card {
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    text-decoration: none;
+    color: #1d1c1d;
+    transition: all 0.3s ease;
+  }
+  
+  .workspace-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  .workspace-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #611f69;
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto 1rem;
+  }
+  
+  .workspace-card h3 {
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  .no-workspaces {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #616061;
+  }
+  
+  .create-workspace-section {
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2rem;
+  }
+  
+  .create-workspace-section p {
+    color: #616061;
+    margin-bottom: 1rem;
+  }
+  
+  .create-workspace-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #611f69;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  
+  .create-workspace-button:hover {
+    background-color: #4a1751;
+  }
+  
+  .loading-spinner {
+    text-align: center;
+    color: #616061;
+    font-style: italic;
+  }
+  
+  .error-message {
+    color: #e01e5a;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 768px) {
+    .home-screen {
+      padding: 1rem;
+    }
+  
+    .home-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  
+    .workspace-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+  }  

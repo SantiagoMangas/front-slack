@@ -26,15 +26,38 @@ const ResetPasswordScreen = () => {
     }
 
     return (
-        <div>
-            <h1>Elige una nueva contraseña</h1>
-            <form onSubmit={handleSubmitResetPassword}>
-                <label htmlFor="password">Nueva contraseña:</label>
-                <input type="password" name="password" id="password" placeholder='********' onChange={handleChangeInput}/>
-                <button>Enviar</button>
-            </form>
-        </div>
-    )
-}
-
+        <main className="auth-screen">
+          <form className="auth-form" onSubmit={handleSubmitResetPassword}>
+            <img src="/Slack-logo.png" alt="Logo de la app" className="logo" />
+            <h1 className="title">Elige una nueva contraseña</h1>
+    
+            {errorMessage && <p className="error-text">{errorMessage}</p>}
+            {successMessage && <p className="success-text">{successMessage}</p>}
+    
+            <div className="input-container">
+              <label htmlFor="password">Nueva contraseña:</label>
+              <div className="input-icon-container">
+                <MdLock className="icon icon-left" size={20} />
+                <input
+                  type={passwordVisible ? "text" : "password"}
+                  name="password"
+                  id="password"
+                  placeholder="********"
+                  onChange={handleChangeInput}
+                  value={form_state.password}
+                />
+                <span onClick={() => setPasswordVisible(!passwordVisible)} className="icon icon-right">
+                  {passwordVisible ? <MdVisibilityOff size={20} /> : <MdVisibility size={20} />}
+                </span>
+              </div>
+            </div>
+    
+            <button type="submit" disabled={!form_state.password}>
+              Restablecer contraseña
+            </button>
+          </form>
+        </main>
+      )
+    }
+    
 export default ResetPasswordScreen

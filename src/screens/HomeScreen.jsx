@@ -3,7 +3,8 @@ import ENVIROMENT from '../utils/constants/enviroment'
 import { getAuthenticatedHeaders } from '../fetching/customHeaders'
 import { useFetch } from '../hooks/useFetch'
 import { Link } from 'react-router-dom'
-
+import "../styles/home.css"
+import { MdWorkspaces } from "react-icons/md"
 
 const HomeScreen = () => {
     const { 
@@ -15,36 +16,46 @@ const HomeScreen = () => {
         headers: getAuthenticatedHeaders()
     })
    console.log(workspace_response)
-  return (
-    <div>
-        <h1>Bienvenido a la app {/* en un futuro podrian poner el nombre del usuario */}</h1>
-        <div>
-            <h2>Tus espacios de trabajo</h2>
-            <div>
-                {
-                workspace_loading
-                ? <h2>Cargando</h2>
-                : (
-                    workspace_response.data.workspaces.length ?  
-                    workspace_response.data.workspaces.map(workspace => {
-                        return (
-                            <div key={workspace._id}>
-                                <h3>{workspace.name}</h3>
-                                <Link to={`/workspace/${workspace._id}`}>Ir al workspace</Link>
-                            </div>
-                        )
-                    })
-                    : <h3>Aun no creaste ningun espacio de trabajo!</h3>
-                )
-                }
-            </div>
-        </div>
-        <div>
-            <span>Aun no tienes espacios de trabajo?</span>
-            <Link to='/workspace/new'>Crear un espacio de trabajo</Link>
-        </div>
+   return (
+    <div className="home-screen">
+        <header className="home-header">
+            <h1>Bienvenido a la app</h1>
+            <Link to="/profile" className="profile-link">Mi Perfil</Link>
+        </header>
+
+        <main className="home-content">
+            <section className="workspaces-section">
+                <h2><MdWorkspaces /> Tus espacios de trabajo</h2>
+                {workspace_loading ? (
+                    <div className="loading-spinner">Cargando...</div>
+                ) : workspace_response_error ? (
+                    <div className="error-message">Error al cargar los espacios de trabajo</div>
+                ) : (
+                    <div className="workspace-grid">
+                        {workspace_response?.data.workspaces.length ? (
+                            workspace_response.data.workspaces.map(workspace => (
+                                <Link to={`/workspace/${workspace._id}`} key={workspace._id} className="workspace-card">
+                                    <div className="workspace-icon">{workspace.name[0].toUpperCase()}</div>
+                                    <h3>{workspace.name}</h3>
+                                </Link>
+                            ))
+                        ) : (
+                            <p className="no-workspaces">Aún no has creado ningún espacio de trabajo.</p>
+                        )}
+                    </div>
+                )}
+            </section>
+
+            <section className="create-workspace-section">
+                <h2>Crear un nuevo espacio de trabajo</h2>
+                <p>Comienza a colaborar con tu equipo en un nuevo espacio de trabajo.</p>
+                <Link to='/workspace/new' className="create-workspace-button">
+                    <MdAdd /> Crear espacio de trabajo
+                </Link>
+            </section>
+        </main>
     </div>
-  )
+    )
 }
 
 export default HomeScreen
