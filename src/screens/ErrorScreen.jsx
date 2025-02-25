@@ -26,7 +26,7 @@ const ErrorScreen = () => {
   return (
     <main className='auth-screen'>
         <form className='auth-form'>
-            <img src='../public/Slack-logo.png' alt='Logo de la app' className='logo' />
+            <img src='/Slack-logo.png' alt='Logo de la app' className='logo' />
 
             <h1 className='title'>{title}</h1>
             <p className='description'>{message}</p>

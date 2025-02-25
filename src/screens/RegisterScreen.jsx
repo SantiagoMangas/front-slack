@@ -54,7 +54,7 @@ const RegisterScreen = () => {
   return (
     <main className='auth-screen'>
       <form className='auth-form' onSubmit={handleSubmitForm}>
-        <img src='../public/Slack-logo.png' alt='Logo de la app' className='logo' />
+        <img src='/Slack-logo.png' alt='Logo de la app' className='logo' />
 
         <h1 className='title'>Registro</h1>
 

@@ -28,7 +28,7 @@ const ForgotPasswordScreen = () => {
     return (
         <main className='auth-screen'>
             <form onSubmit={handleSubmitForgotPassword} className='auth-form'>
-                <img src='../public/Slack-logo.png' alt='Logo de la app' className='logo' />
+                <img src='/Slack-logo.png' alt='Logo de la app' className='logo' />
 
                 <h1 className='title'>Restablecer contraseña</h1>
                 <p className='description'>
