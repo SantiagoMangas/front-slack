@@ -7,7 +7,9 @@ const ForgotPasswordScreen = () => {
 
     const handleSubmitForgotPassword = async (e) => {
         try {
-            e.preventDefault()
+            e.preventDefault();
+            console.log("Enviando solicitud de recuperación con:", form_state);
+    
             const response = await fetch(ENVIROMENT.API_URL + '/api/auth/forgot-password', {
                 method: "POST",
                 headers: {
@@ -15,15 +17,20 @@ const ForgotPasswordScreen = () => {
                     'x-api-key': ENVIROMENT.API_KEY
                 },
                 body: JSON.stringify(form_state)
-            })
-            const data = await response.json()
+            });
+    
+            const data = await response.json();
+            console.log("Respuesta del servidor:", data);
+    
             if (data.ok) {
-                alert('Se envio el mail de verificacion')
+                alert('Se envió el mail de verificación');
+            } else {
+                alert(`Error: ${data.message}`);
             }
         } catch (error) {
-            console.error(error)
+            console.error("Error en la petición:", error);
         }
-    }
+    };    
 
     return (
         <main className='auth-screen'>
