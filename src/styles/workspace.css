@@ -146,4 +146,60 @@
   
   .error-text {
     color: #e01e5a;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+  }
+
+  .close-modal {
+    float: right;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .modal h2 {
+    margin-bottom: 15px;
+  }
+
+  .modal form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .modal button[type="submit"] {
+    background-color: #007a5a;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .modal button[type="submit"]:hover {
+    background-color: #148567;
   }  

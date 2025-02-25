@@ -129,7 +129,6 @@
     text-align: center;
     font-weight: 600;
   }
-  
   @media (max-width: 768px) {
     .home-screen {
       padding: 1rem;
