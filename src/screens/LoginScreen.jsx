@@ -99,10 +99,10 @@ const LoginScreen = () => {
         </button>
 
         <p className="description">
-          ¿Olvidaste tu contraseña? <Link to="/forgot-password">Recupérala aquí</Link>
+          ¿Olvidaste tu contraseña? <span onClick={() => navigate("/forgot-password")} style={{ cursor: "pointer", color: "#611F69", textDecoration: "underline" }}>Recupérala aquí</span>
         </p>
         <p className="description">
-          ¿No tienes una cuenta? <Link to="/register">Regístrate</Link>
+          ¿No tienes una cuenta? <span onClick={() => navigate("/register")} style={{ cursor: "pointer", color: "#611F69", textDecoration: "underline" }}>Regístrate</span>
         </p>
       </form>
     </main>
