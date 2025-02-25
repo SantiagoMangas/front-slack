@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import { useFetch } from "../hooks/useFetch"
@@ -7,8 +5,8 @@ import ENVIROMENT from "../utils/constants/enviroment"
 import { getAuthenticatedHeaders } from "../fetching/customHeaders"
 import { MdAdd } from "react-icons/md"
 import "../styles/workspace.css"
-import ChannelView from "..screens/ChannelView"
-import AddChannelModal from "..screens/AddChannelModal"
+import ChannelView from "../screens/ChannelView"
+import AddChannelModal from "../screens/AddChannelModal"
 
 const WorkspaceScreen = () => {
   const { workspace_id, channel_id } = useParams()
