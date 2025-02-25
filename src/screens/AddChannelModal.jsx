@@ -12,9 +12,6 @@ const AddChannelModal = ({ onClose, onAddChannel }) => {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <button className="close-modal" onClick={onClose}>
-          <MdClose />
-        </button>
         <h2>Añadir nuevo canal</h2>
         <form onSubmit={handleSubmit}>
           <input
@@ -25,7 +22,14 @@ const AddChannelModal = ({ onClose, onAddChannel }) => {
             placeholder="Nombre del canal"
             required
           />
-          <button type="submit">Crear canal</button>
+          <div className="modal-actions">
+            <button type="submit" className="submit-button">
+              Crear canal
+            </button>
+            <button type="button" onClick={onClose} className="close-button">
+              <MdClose /> Cancelar
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -33,4 +37,3 @@ const AddChannelModal = ({ onClose, onAddChannel }) => {
 }
 
 export default AddChannelModal
-

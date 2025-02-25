@@ -147,7 +147,7 @@
   .error-text {
     color: #e01e5a;
   }
-  
+
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -202,4 +202,39 @@
 
   .modal button[type="submit"]:hover {
     background-color: #148567;
-  }  
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .modal .submit-button {
+    background-color: #007a5a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .modal .close-button {
+    background-color: transparent;
+    color: #1d1c1d;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  .modal .close-button:hover {
+    background-color: #f8f8f8;
+  }
+
+  .modal .close-button svg {
+    margin-right: 5px;
+  }

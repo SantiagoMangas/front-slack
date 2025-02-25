@@ -37,20 +37,28 @@ const ChannelView = ({ workspace_id, channel_id }) => {
   }
 
   if (channel_loading) return <div className="channel-loading">Cargando canal...</div>
-  if (channel_error) return <div className="channel-error">Error al cargar el canal</div>
+  if (channel_error) return <div className="channel-error">Error al cargar el canal: {channel_error.message}</div>
+  if (!channel_data || !channel_data.data)
+    return <div className="channel-error">No se pudo cargar la información del canal</div>
+
+  const { name, messages } = channel_data.data
 
   return (
     <div className="channel-container">
       <div className="channel-header">
-        <h2># {channel_data.data.name}</h2>
+        <h2># {name}</h2>
       </div>
       <div className="messages-container">
-        {channel_data.data.messages.map((message) => (
-          <div key={message._id} className="message">
-            <div className="message-author">{message.sender.username}</div>
-            <div className="message-content">{message.content}</div>
-          </div>
-        ))}
+        {messages && messages.length > 0 ? (
+          messages.map((message) => (
+            <div key={message._id} className="message">
+              <div className="message-author">{message.sender.username}</div>
+              <div className="message-content">{message.content}</div>
+            </div>
+          ))
+        ) : (
+          <p>No hay mensajes en este canal aún.</p>
+        )}
       </div>
       <form onSubmit={handleSubmitNewMessage} className="message-form">
         <input
