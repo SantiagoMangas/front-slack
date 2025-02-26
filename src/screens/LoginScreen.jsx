@@ -5,6 +5,7 @@ import useForm from "../hooks/useForm"
 import useValidation from "../hooks/useValidation"
 import ENVIROMENT from "../utils/constants/enviroment"
 import { AuthContext } from "../Context/AuthContext"
+import {Link} from "react-router-dom"
 import "../styles/auth.css"
 
 const LoginScreen = () => {
@@ -16,8 +17,12 @@ const LoginScreen = () => {
   const [errorMessage, setErrorMessage] = useState("")
 
   useEffect(() => {
-    validate()
-  }, [form_state, validate])
+    if (form_state.email || form_state.password) {
+      validate();
+    }
+    // Eliminamos validate de las dependencias
+  }, [form_state.email, form_state.password]);
+  
 
   const handleSubmitForm = async (event) => {
     event.preventDefault()
@@ -96,22 +101,22 @@ const LoginScreen = () => {
         </button>
 
         <p className="description">
-          ¿Olvidaste tu contraseña?{" "}
-          <span
-            onClick={() => navigate("/forgot-password")}
+          ¿Olvidaste tu contraseña?
+          <Link
+            to="/forgot-password"
             style={{ cursor: "pointer", color: "#611F69", textDecoration: "underline" }}
           >
             Recupérala aquí
-          </span>
+          </Link>
         </p>
         <p className="description">
-          ¿No tienes una cuenta?{" "}
-          <span
-            onClick={() => navigate("/register")}
+          ¿No tienes una cuenta?
+          <Link
+            to="/register"
             style={{ cursor: "pointer", color: "#611F69", textDecoration: "underline" }}
           >
             Regístrate
-          </span>
+          </Link>
         </p>
       </form>
     </main>
