@@ -31,6 +31,7 @@ const WorkspaceScreen = () => {
 
   const handleAddChannel = async (channelName) => {
     try {
+      console.log("Iniciando creación de canal:", channelName)
       const response = await fetch(ENVIROMENT.API_URL + `/api/channel/${workspace_id}`, {
         method: "POST",
         headers: {
@@ -41,16 +42,21 @@ const WorkspaceScreen = () => {
       })
 
       const data = await response.json()
-      console.log("Respuesta al crear canal:", data)
+      console.log("Respuesta completa al crear canal:", data)
 
-      if (data.ok) {
+      if (response.ok) {
+        console.log("Canal creado exitosamente, actualizando lista de canales")
         await refetchChannels()
         setIsAddingChannel(false)
       } else {
         console.error("Error al crear el canal:", data.message)
+        // Mostrar el error al usuario
+        alert(`Error al crear el canal: ${data.message}`)
       }
     } catch (error) {
       console.error("Error al crear el canal:", error)
+      // Mostrar el error al usuario
+      alert(`Error al crear el canal: ${error.message}`)
     }
   }
 
