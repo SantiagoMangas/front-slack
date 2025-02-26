@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Link, useParams } from "react-router-dom"
 import { useFetch } from "../hooks/useFetch"
 import ENVIROMENT from "../utils/constants/enviroment"
@@ -18,46 +18,52 @@ const WorkspaceScreen = () => {
     error: channels_error,
     loading: channels_loading,
     refetch: refetchChannels,
-  } = useFetch(ENVIROMENT.API_URL + `/api/channel/${workspace_id}`, {
-    method: "GET",
-    headers: getAuthenticatedHeaders(),
-  })
+  } = useFetch(
+    ENVIROMENT.API_URL + `/api/channel/${workspace_id}`,
+    {
+      method: "GET",
+      headers: getAuthenticatedHeaders(),
+    },
+    [workspace_id],
+  )
 
   useEffect(() => {
-    if (channels_data) {
+    if (channels_data && channels_data.data && channels_data.data.channels) {
       setChannels(channels_data.data.channels)
     }
   }, [channels_data])
 
-  const handleAddChannel = async (channelName) => {
-    try {
-      console.log("Iniciando creación de canal:", channelName)
-      const response = await fetch(ENVIROMENT.API_URL + `/api/channel/${workspace_id}`, {
-        method: "POST",
-        headers: {
-          ...getAuthenticatedHeaders(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: channelName }),
-      })
+  const handleAddChannel = useCallback(
+    async (channelName) => {
+      try {
+        console.log("Iniciando creación de canal:", channelName)
+        const response = await fetch(ENVIROMENT.API_URL + `/api/channel/${workspace_id}`, {
+          method: "POST",
+          headers: {
+            ...getAuthenticatedHeaders(),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: channelName }),
+        })
 
-      const data = await response.json()
-      console.log("Respuesta completa al crear canal:", data)
+        const data = await response.json()
+        console.log("Respuesta completa al crear canal:", data)
 
-      if (response.ok) {
-        console.log("Canal creado exitosamente, actualizando lista de canales")
-        // En lugar de usar refetchChannels, actualizo el estado directamente
-        setChannels((prevChannels) => [...prevChannels, data.data.new_channel])
-        setIsAddingChannel(false)
-      } else {
-        console.error("Error al crear el canal:", data.message)
-        alert(`Error al crear el canal: ${data.message}`)
+        if (response.ok) {
+          console.log("Canal creado exitosamente, actualizando lista de canales")
+          await refetchChannels()
+          setIsAddingChannel(false)
+        } else {
+          console.error("Error al crear el canal:", data.message)
+          alert(`Error al crear el canal: ${data.message}`)
+        }
+      } catch (error) {
+        console.error("Error al crear el canal:", error)
+        alert(`Error al crear el canal: ${error.message}`)
       }
-    } catch (error) {
-      console.error("Error al crear el canal:", error)
-      alert(`Error al crear el canal: ${error.message}`)
-    }
-  }
+    },
+    [workspace_id, refetchChannels],
+  )
 
   return (
     <div className="workspace-screen">

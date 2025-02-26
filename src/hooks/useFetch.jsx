@@ -1,34 +1,35 @@
-import { useState, useEffect, useCallback } from "react"
+import { useEffect, useState, useCallback } from "react"
 
-export const useFetch = (url, options = {}) => {
+export const useFetch = (api_url, params, dependencies = []) => {
+  const [loading, setIsLoading] = useState(true)
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(true)
 
-  const fetchData = useCallback(async () => {
+  const callFetch = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
     try {
-      setLoading(true)
-      const response = await fetch(url, options)
+      const response = await fetch(api_url, params)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      const result = await response.json()
-      setData(result)
-      setError(null)
-    } catch (e) {
-      setError(e.message)
+      const responseData = await response.json()
+      setData(responseData)
+    } catch (error) {
+      console.error("Error en useFetch:", error)
+      setError(error.message)
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
-  }, [url, options])
+  }, [api_url, params])
 
   useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    callFetch()
+  }, [callFetch, ...dependencies])
 
   const refetch = useCallback(() => {
-    fetchData()
-  }, [fetchData])
+    callFetch()
+  }, [callFetch])
 
-  return { data, error, loading, refetch }
+  return { loading, data, error, refetch }
 }
