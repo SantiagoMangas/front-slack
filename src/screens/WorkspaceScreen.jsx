@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useNavigate } from "react-router-dom"
 import { useFetch } from "../hooks/useFetch"
 import ENVIROMENT from "../utils/constants/enviroment"
 import { getAuthenticatedHeaders } from "../fetching/customHeaders"
@@ -10,8 +10,10 @@ import AddChannelModal from "../screens/AddChannelModal"
 
 const WorkspaceScreen = () => {
   const { workspace_id, channel_id } = useParams()
+  const navigate = useNavigate()
   const [channels, setChannels] = useState([])
   const [isAddingChannel, setIsAddingChannel] = useState(false)
+  const [workspaceName, setWorkspaceName] = useState("Workspace")
 
   const {
     data: channels_data,
@@ -30,6 +32,11 @@ const WorkspaceScreen = () => {
   useEffect(() => {
     if (channels_data && channels_data.data && channels_data.data.channels) {
       setChannels(channels_data.data.channels)
+      
+      // Si el API devuelve el nombre del workspace, actualizarlo
+      if (channels_data.data.workspace && channels_data.data.workspace.name) {
+        setWorkspaceName(channels_data.data.workspace.name)
+      }
     }
   }, [channels_data])
 
@@ -46,9 +53,25 @@ const WorkspaceScreen = () => {
         const data = await response.json()
         console.log("Respuesta completa al crear canal:", data)
 
-        if (response.ok) {
-          refetchChannels();
-          setIsAddingChannel(false)
+        if (response.ok && data.ok) {
+          // Aseguramos que la respuesta incluya el ID del canal creado
+          if (data.data && data.data._id) {
+            // Primero cerramos el modal
+            setIsAddingChannel(false)
+            
+            // Luego refrescamos los canales
+            await refetchChannels()
+            
+            // Finalmente navegamos al nuevo canal
+            // Usamos setTimeout para asegurar que la UI se actualice correctamente
+            setTimeout(() => {
+              navigate(`/workspace/${workspace_id}/${data.data._id}`)
+            }, 100)
+          } else {
+            console.warn("El canal se creó pero no se recibió su ID", data)
+            refetchChannels()
+            setIsAddingChannel(false)
+          }
         } else {
           console.error("Error al crear el canal:", data.message)
           alert(`Error al crear el canal: ${data.message}`)
@@ -58,24 +81,29 @@ const WorkspaceScreen = () => {
         alert(`Error al crear el canal: ${error.message}`)
       }
     },
-    [workspace_id, refetchChannels],
+    [workspace_id, refetchChannels, navigate],
   )
 
   return (
     <div className="workspace-screen">
       <div className="workspace-sidebar">
-        <h2 className="workspace-name">Workspace Name</h2>
+        <h2 className="workspace-name">{workspaceName}</h2>
         <ChannelsList
           channels={channels}
           loading={channels_loading}
           error={channels_error}
           workspace_id={workspace_id}
+          currentChannelId={channel_id}
           onAddChannel={() => setIsAddingChannel(true)}
         />
       </div>
       <div className="workspace-main">
         {channel_id ? (
-          <ChannelView workspace_id={workspace_id} channel_id={channel_id} />
+          <ChannelView 
+            key={channel_id} 
+            workspace_id={workspace_id} 
+            channel_id={channel_id} 
+          />
         ) : (
           <div className="channel-placeholder">
             <h2>Bienvenido al workspace</h2>
@@ -88,7 +116,7 @@ const WorkspaceScreen = () => {
   )
 }
 
-const ChannelsList = ({ channels, loading, error, workspace_id, onAddChannel }) => {
+const ChannelsList = ({ channels, loading, error, workspace_id, currentChannelId, onAddChannel }) => {
   if (loading) return <p>Cargando canales...</p>
   if (error) return <p className="error-text">Error al cargar los canales: {error}</p>
 
@@ -97,7 +125,11 @@ const ChannelsList = ({ channels, loading, error, workspace_id, onAddChannel }) 
       <h3 className="channels-header">Canales</h3>
       {channels && channels.length > 0 ? (
         channels.map((channel) => (
-          <Link key={channel._id} to={`/workspace/${workspace_id}/${channel._id}`} className="channel-link">
+          <Link 
+            key={channel._id} 
+            to={`/workspace/${workspace_id}/${channel._id}`} 
+            className={`channel-link ${channel._id === currentChannelId ? 'active' : ''}`}
+          >
             # {channel.name}
           </Link>
         ))
