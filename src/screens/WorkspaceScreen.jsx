@@ -39,10 +39,7 @@ const WorkspaceScreen = () => {
         console.log("Iniciando creación de canal:", channelName)
         const response = await fetch(ENVIROMENT.API_URL + `/api/channel/${workspace_id}`, {
           method: "POST",
-          headers: {
-            ...getAuthenticatedHeaders(),
-            "Content-Type": "application/json",
-          },
+          headers: getAuthenticatedHeaders(),
           body: JSON.stringify({ name: channelName }),
         })
 
@@ -50,8 +47,7 @@ const WorkspaceScreen = () => {
         console.log("Respuesta completa al crear canal:", data)
 
         if (response.ok) {
-          console.log("Canal creado exitosamente, actualizando lista de canales")
-          await refetchChannels()
+          refetchChannels();
           setIsAddingChannel(false)
         } else {
           console.error("Error al crear el canal:", data.message)
