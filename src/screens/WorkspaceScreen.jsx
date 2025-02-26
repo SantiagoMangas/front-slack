@@ -46,16 +46,15 @@ const WorkspaceScreen = () => {
 
       if (response.ok) {
         console.log("Canal creado exitosamente, actualizando lista de canales")
-        await refetchChannels()
+        // En lugar de usar refetchChannels, actualizo el estado directamente
+        setChannels((prevChannels) => [...prevChannels, data.data.new_channel])
         setIsAddingChannel(false)
       } else {
         console.error("Error al crear el canal:", data.message)
-        // Mostrar el error al usuario
         alert(`Error al crear el canal: ${data.message}`)
       }
     } catch (error) {
       console.error("Error al crear el canal:", error)
-      // Mostrar el error al usuario
       alert(`Error al crear el canal: ${error.message}`)
     }
   }
@@ -89,16 +88,20 @@ const WorkspaceScreen = () => {
 
 const ChannelsList = ({ channels, loading, error, workspace_id, onAddChannel }) => {
   if (loading) return <p>Cargando canales...</p>
-  if (error) return <p className="error-text">Error al cargar los canales</p>
+  if (error) return <p className="error-text">Error al cargar los canales: {error}</p>
 
   return (
     <div className="channels-list">
       <h3 className="channels-header">Canales</h3>
-      {channels.map((channel) => (
-        <Link key={channel._id} to={`/workspace/${workspace_id}/${channel._id}`} className="channel-link">
-          # {channel.name}
-        </Link>
-      ))}
+      {channels && channels.length > 0 ? (
+        channels.map((channel) => (
+          <Link key={channel._id} to={`/workspace/${workspace_id}/${channel._id}`} className="channel-link">
+            # {channel.name}
+          </Link>
+        ))
+      ) : (
+        <p>No hay canales disponibles</p>
+      )}
       <button className="add-channel-btn" onClick={onAddChannel}>
         <MdAdd /> Añadir canal
       </button>
