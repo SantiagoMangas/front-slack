@@ -37,11 +37,16 @@ const ChannelView = ({ workspace_id, channel_id }) => {
   }
 
   if (channel_loading) return <div className="channel-loading">Cargando canal...</div>
-  if (channel_error) return <div className="channel-error">Error al cargar el canal: {channel_error.message}</div>
-  if (!channel_data || !channel_data.data)
+  if (channel_error) {
+    console.error("Error al cargar el canal:", channel_error)
+    return <div className="channel-error">Error al cargar el canal: {channel_error.message}</div>
+  }
+  if (!channel_data || !channel_data.data) {
+    console.error("Data recibida:", channel_data);
     return <div className="channel-error">No se pudo cargar la información del canal</div>
-
-  const { name, messages } = channel_data.data
+  }
+  
+  const { name, messages } = channel_data.data;
 
   return (
     <div className="channel-container">

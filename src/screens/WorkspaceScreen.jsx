@@ -35,19 +35,22 @@ const WorkspaceScreen = () => {
         method: "POST",
         headers: getAuthenticatedHeaders(),
         body: JSON.stringify({ name: channelName }),
-      })
-      const data = await response.json()
-      if (response.ok) {
-        setChannels([...channels, data.data.new_channel])
-        setIsAddingChannel(false)
-        refetchChannels()
+      });
+      
+      const data = await response.json();
+      console.log("Respuesta al crear canal:", data);
+      
+      if (data.ok) {
+        // Usar refetchChannels en lugar de manipular el estado directamente
+        refetchChannels();
+        setIsAddingChannel(false);
       } else {
-        console.error("Error al crear el canal:", data.message)
+        console.error("Error al crear el canal:", data.message);
       }
     } catch (error) {
-      console.error("Error al crear el canal:", error)
+      console.error("Error al crear el canal:", error);
     }
-  }
+  };
 
   return (
     <div className="workspace-screen">

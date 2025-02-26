@@ -1,63 +1,81 @@
-import React from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { MdEmail } from 'react-icons/md'
 import useForm from '../hooks/useForm'
 import ENVIROMENT from '../utils/constants/enviroment'
+import '../styles/auth.css'
 
 const ForgotPasswordScreen = () => {
-    const { form_state, handleChangeInput } = useForm({ email: '' })
+  const navigate = useNavigate()
+  const { form_state, handleChangeInput, resetForm } = useForm({ email: "" })
+  const [errorMessage, setErrorMessage] = useState("")
+  const [successMessage, setSuccessMessage] = useState("")
 
-    const handleSubmitForgotPassword = async (e) => {
-        try {
-            e.preventDefault();
-            console.log("Enviando solicitud de recuperación con:", form_state);
-    
-            const response = await fetch(ENVIROMENT.API_URL + '/api/auth/forgot-password', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': ENVIROMENT.API_KEY
-                },
-                body: JSON.stringify(form_state)
-            });
-    
-            const data = await response.json();
-            console.log("Respuesta del servidor:", data);
-    
-            if (data.ok) {
-                alert('Se envió el mail de verificación');
-            } else {
-                alert(`Error: ${data.message}`);
-            }
-        } catch (error) {
-            console.error("Error en la petición:", error);
-        }
-    };    
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch(`${ENVIROMENT.API_URL}/api/auth/forgot-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": ENVIROMENT.API_KEY,
+        },
+        body: JSON.stringify(form_state),
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setSuccessMessage("Se ha enviado un correo con instrucciones para restablecer tu contraseña.")
+        resetForm()
+      } else {
+        setErrorMessage(data.message || "Error al procesar la solicitud")
+      }
+    } catch (error) {
+      console.error("Error:", error)
+      setErrorMessage("Hubo un error al procesar tu solicitud. Intenta nuevamente.")
+    }
+  }
 
-    return (
-        <main className='auth-screen'>
-            <form onSubmit={handleSubmitForgotPassword} className='auth-form'>
-                <img src='/Slack-logo.png' alt='Logo de la app' className='logo' />
+  return (
+    <main className="auth-screen">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <img src="/Slack-logo.png" alt="Logo de la app" className="logo" />
+        <h1 className="title">Recuperar contraseña</h1>
 
-                <h1 className='title'>Restablecer contraseña</h1>
-                <p className='description'>
-                    Vamos a enviarte un correo electrónico con los pasos a seguir para restablecer tu contraseña.
-                </p>
+        {errorMessage && <p className="error-text">{errorMessage}</p>}
+        {successMessage && <p className="success-text">{successMessage}</p>}
 
-                <div className='input-container'>
-                    <label htmlFor="email">Ingresa el mail con el que te registraste:</label>
-                    <input
-                        placeholder='joedoe@email.com'
-                        name='email'
-                        id='email'
-                        onChange={handleChangeInput}
-                    />
-                </div>
+        <div className="input-container">
+          <label htmlFor="email">Correo electrónico</label>
+          <div className="input-icon-container">
+            <MdEmail className="icon icon-left" size={20} />
+            <input
+              name="email"
+              id="email"
+              type="email"
+              placeholder="ejemplo@email.com"
+              value={form_state.email}
+              onChange={handleChangeInput}
+              required
+            />
+          </div>
+        </div>
 
-                <button type="submit" disabled={!form_state.email}>
-                    Enviar correo
-                </button>
-            </form>
-        </main>
-    )
+        <button type="submit" disabled={!form_state.email}>
+          Enviar instrucciones
+        </button>
+
+        <p className="description">
+          ¿Recordaste tu contraseña?{" "}
+          <span
+            onClick={() => navigate("/login")}
+            style={{ cursor: "pointer", color: "#611F69", textDecoration: "underline" }}
+          >
+            Inicia sesión
+          </span>
+        </p>
+      </form>
+    </main>
+  )
 }
 
 export default ForgotPasswordScreen

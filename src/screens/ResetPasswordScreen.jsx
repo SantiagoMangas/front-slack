@@ -1,14 +1,15 @@
-import React from "react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { MdLock, MdVisibility, MdVisibilityOff } from "react-icons/md"
 import useForm from "../hooks/useForm"
 import ENVIROMENT from "../utils/constants/enviroment"
 import "../styles/auth.css"
 
 const ResetPasswordScreen = () => {
+  const navigate = useNavigate()
   const url = new URLSearchParams(window.location.search)
   const reset_token = url.get("reset_token")
-  const { form_state, handleChangeInput } = useForm({ password: "" })
+  const { form_state, handleChangeInput, resetForm } = useForm({ password: "" })
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
@@ -26,16 +27,15 @@ const ResetPasswordScreen = () => {
       })
       const data = await response.json()
       if (response.ok) {
-        setSuccessMessage("Tu contraseña ha sido actualizada exitosamente.")
-        setErrorMessage("")
+        setSuccessMessage("Tu contraseña ha sido actualizada exitosamente. Redirigiendo al inicio de sesión...")
+        resetForm()
+        setTimeout(() => navigate("/login"), 3000)
       } else {
-        setErrorMessage(data.message || "Hubo un error al restablecer la contraseña.")
-        setSuccessMessage("")
+        setErrorMessage(data.message || "Error al restablecer la contraseña.")
       }
     } catch (error) {
       console.error(error)
       setErrorMessage("Hubo un error al conectar con el servidor.")
-      setSuccessMessage("")
     }
   }
 
@@ -69,6 +69,16 @@ const ResetPasswordScreen = () => {
         <button type="submit" disabled={!form_state.password}>
           Restablecer contraseña
         </button>
+
+        <p className="description">
+          ¿Recordaste tu contraseña?{" "}
+          <span
+            onClick={() => navigate("/login")}
+            style={{ cursor: "pointer", color: "#611F69", textDecoration: "underline" }}
+          >
+            Inicia sesión
+          </span>
+        </p>
       </form>
     </main>
   )
