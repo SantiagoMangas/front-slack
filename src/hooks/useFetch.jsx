@@ -17,7 +17,7 @@ export const useFetch = (api_url, params, dependencies = []) => {
       setData(responseData)
     } catch (error) {
       console.error("Error en useFetch:", error)
-      setError(error.message)
+      setError(error.message || "Ocurrió un error desconocido")
     } finally {
       setIsLoading(false)
     }
