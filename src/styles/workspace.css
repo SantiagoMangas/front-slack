@@ -30,16 +30,49 @@
   
   .channel-link {
     display: block;
-    color: #cfc3cf;
+    padding: 8px 15px;
+    color: #333;
     text-decoration: none;
-    padding: 5px 0;
-    font-size: 15px;
+    border-radius: 4px;
+    margin-bottom: 2px;
   }
   
   .channel-link:hover {
     background-color: #350d36;
   }
-  
+
+  .channel-link.active {
+    background-color: rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+  }
+  .refresh-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.retry-button {
+  padding: 8px 15px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.retry-button:hover {
+  background-color: #e0e0e0;
+}
+
   .add-channel-btn {
     display: flex;
     align-items: center;
