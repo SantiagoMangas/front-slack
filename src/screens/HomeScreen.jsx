@@ -33,16 +33,16 @@ const HomeScreen = () => {
                     <div className="error-message">Error al cargar los espacios de trabajo</div>
                 ) : (
                     <div className="workspace-grid">
-                        {workspace_response?.data.workspaces.length ? (
-                            workspace_response.data.workspaces.map(workspace => (
-                                <Link to={`/workspace/${workspace._id}`} key={workspace._id} className="workspace-card">
-                                    <div className="workspace-icon">{workspace.name[0].toUpperCase()}</div>
-                                    <h3>{workspace.name}</h3>
-                                </Link>
-                            ))
-                        ) : (
-                            <p className="no-workspaces">Aún no has creado ningún espacio de trabajo.</p>
-                        )}
+                        {workspace_response?.data?.workspaces?.length ? (
+                          workspace_response.data.workspaces.map(workspace => (
+                              <Link to={`/workspace/${workspace._id}`} key={workspace._id} className="workspace-card">
+                                  <div className="workspace-icon">{workspace.name[0].toUpperCase()}</div>
+                                  <h3>{workspace.name}</h3>
+                              </Link>
+                          ))
+                      ) : (
+                          <p className="no-workspaces">Aún no has creado ningún espacio de trabajo.</p>
+                      )}
                     </div>
                 )}
             </section>
