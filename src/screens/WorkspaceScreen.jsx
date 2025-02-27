@@ -24,10 +24,14 @@ const WorkspaceScreen = () => {
   })
 
   useEffect(() => {
-    if (channels_data) {
-      setChannels(channels_data.data.channels)
+    if (channels_data && channels_data.data) {
+      console.log("Canales obtenidos:", channels_data.data.channels);
+      setChannels(channels_data.data.channels || []);
+    } else {
+      console.warn("No se encontraron canales, asignando array vacío");
+      setChannels([]); // Evitar errores por undefined
     }
-  }, [channels_data])
+  }, [channels_data]);  
 
   const handleAddChannel = async (channelName) => {
     try {
