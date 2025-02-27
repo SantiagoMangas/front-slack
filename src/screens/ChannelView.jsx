@@ -21,10 +21,11 @@ const ChannelView = ({ workspace_id, channel_id }) => {
   const [isLoadingManually, setIsLoadingManually] = useState(false)
 
   useEffect(() => {
+    console.log("Datos de la API recibidos en ChannelView:", channel_data);
     if (channel_data && channel_data.data) {
-      setChannelData(channel_data.data)
+      setChannelData(channel_data.data);
     }
-  }, [channel_data])
+  }, [channel_data]);  
 
   const handleSubmitNewMessage = async (e) => {
     e.preventDefault()
