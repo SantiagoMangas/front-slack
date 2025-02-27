@@ -6,6 +6,8 @@ import { MdSend, MdRefresh } from "react-icons/md"
 import { useEffect, useState } from "react"
 
 const ChannelView = ({ workspace_id, channel_id }) => {
+  console.log("Haciendo petición con workspace_id:", workspace_id, "channel_id:", channel_id);
+
   const {
     data: channel_data,
     loading: channel_loading,
