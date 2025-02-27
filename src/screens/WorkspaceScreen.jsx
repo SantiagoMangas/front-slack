@@ -1,75 +1,57 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import { useFetch } from "../hooks/useFetch"
 import ENVIROMENT from "../utils/constants/enviroment"
 import { getAuthenticatedHeaders } from "../fetching/customHeaders"
 import { MdAdd } from "react-icons/md"
 import "../styles/workspace.css"
-import ChannelView from "../screens/ChannelView"
-import AddChannelModal from "../screens/AddChannelModal"
+import ChannelView from "./ChannelView"
+import AddChannelModal from "./AddChannelModal"
 
 const WorkspaceScreen = () => {
   const { workspace_id, channel_id } = useParams()
   const [channels, setChannels] = useState([])
   const [isAddingChannel, setIsAddingChannel] = useState(false)
-  const [selectedChannel, setSelectedChannel] = useState(channel_id)
 
   const {
     data: channels_data,
     error: channels_error,
     loading: channels_loading,
     refetch: refetchChannels,
-  } = useFetch(
-    ENVIROMENT.API_URL + `/api/channel/${workspace_id}`,
-    {
-      method: "GET",
-      headers: getAuthenticatedHeaders(),
-    },
-    [workspace_id],
-  )
+  } = useFetch(ENVIROMENT.API_URL + `/api/channel/${workspace_id}`, {
+    method: "GET",
+    headers: getAuthenticatedHeaders(),
+  })
 
   useEffect(() => {
-    if (channels_data && channels_data.data && channels_data.data.channels) {
+    if (channels_data) {
       setChannels(channels_data.data.channels)
     }
   }, [channels_data])
 
-  const handleAddChannel = useCallback(
-    async (channelName) => {
-      try {
-        console.log("Iniciando creación de canal:", channelName)
-        const response = await fetch(ENVIROMENT.API_URL + `/api/channel/${workspace_id}`, {
-          method: "POST",
-          headers: {
-            ...getAuthenticatedHeaders(),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name: channelName }),
-        })
-
-        const data = await response.json()
-        console.log("Respuesta completa al crear canal:", data)
-
-        if (response.ok && data.ok) {
-          setIsAddingChannel(false)
-          await refetchChannels()
-
-          // Actualizar los canales localmente
-          if (data.data && data.data.new_channel) {
-            setChannels((prevChannels) => [...prevChannels, data.data.new_channel])
-            setSelectedChannel(data.data.new_channel._id)
-          }
-        } else {
-          console.error("Error al crear el canal:", data.message)
-          alert(`Error al crear el canal: ${data.message}`)
-        }
-      } catch (error) {
-        console.error("Error al crear el canal:", error)
-        alert(`Error al crear el canal: ${error.message}`)
+  const handleAddChannel = async (channelName) => {
+    try {
+      const response = await fetch(ENVIROMENT.API_URL + `/api/channel/${workspace_id}`, {
+        method: "POST",
+        headers: getAuthenticatedHeaders(),
+        body: JSON.stringify({ name: channelName }),
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setChannels([...channels, data.data.new_channel])
+        setIsAddingChannel(false)
+        refetchChannels()
+      } else {
+        console.error("Error al crear el canal:", data.message)
+        // Mostrar el mensaje de error al usuario
+        alert(`Error al crear el canal: ${data.message}`)
       }
-    },
-    [workspace_id, refetchChannels],
-  )
+    } catch (error) {
+      console.error("Error al crear el canal:", error)
+      // Mostrar un mensaje de error genérico al usuario
+      alert("Hubo un error al crear el canal. Por favor, inténtalo de nuevo.")
+    }
+  }
 
   return (
     <div className="workspace-screen">
@@ -100,20 +82,16 @@ const WorkspaceScreen = () => {
 
 const ChannelsList = ({ channels, loading, error, workspace_id, onAddChannel }) => {
   if (loading) return <p>Cargando canales...</p>
-  if (error) return <p className="error-text">Error al cargar los canales: {error}</p>
+  if (error) return <p className="error-text">Error al cargar los canales</p>
 
   return (
     <div className="channels-list">
       <h3 className="channels-header">Canales</h3>
-      {channels && channels.length > 0 ? (
-        channels.map((channel) => (
-          <Link key={channel._id} to={`/workspace/${workspace_id}/${channel._id}`} className="channel-link">
-            # {channel.name}
-          </Link>
-        ))
-      ) : (
-        <p>No hay canales disponibles</p>
-      )}
+      {channels.map((channel) => (
+        <Link key={channel._id} to={`/workspace/${workspace_id}/${channel._id}`} className="channel-link">
+          # {channel.name}
+        </Link>
+      ))}
       <button className="add-channel-btn" onClick={onAddChannel}>
         <MdAdd /> Añadir canal
       </button>
